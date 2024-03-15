@@ -1,25 +1,28 @@
-import React, { memo, useEffect, useState } from 'react';
-import Image from 'next/image';
-import { Recipe } from '../../util/RecipeType';
-import clsx from 'clsx';
-import Recommendation from '@/components/Recommendation';
-import Orders from '@/components/Orders';
+import { useClient } from 'next/client'
+import React, { memo, useEffect, useState } from 'react'
+import Image from 'next/image'
+import { Recipe } from '../../util/RecipeType'
+import clsx from 'clsx'
+import Recommendation from '@/components/Recommendation'
+import Orders from '@/components/Orders'
 
 const page = memo(() => {
-  const email = localStorage?.getItem('email');
-  const [type, setType] = useState<"user" | "chef">("user");
-  const [recipes, setRecipes] = useState<Recipe[]>();
-  const [orderlist, setOrderlist] = useState([]);
+  useClient()
 
-  const [spin, setSpin] = useState(false);
+  const email = localStorage?.getItem('email')
+  const [type, setType] = useState<"user" | "chef">("user")
+  const [recipes, setRecipes] = useState<Recipe[]>()
+  const [orderlist, setOrderlist] = useState([])
+
+  const [spin, setSpin] = useState(false)
 
   function search() {
-    setSpin(true);
+    setSpin(true)
     setTimeout(() => {
-      setSpin(false);
-    }, 1000);
+      setSpin(false)
+    }, 1000)
     /* loading time for geting recipe data */
-    setSpin(false);
+    setSpin(false)
   }
 
   useEffect(() => {
@@ -28,19 +31,19 @@ const page = memo(() => {
       const response = await fetch('http://localhost:4000/orders', {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
-      });
-      const data = await response.json();
-      setOrderlist(data);
-      console.log(data);
-    };
+      })
+      const data = await response.json()
+      setOrderlist(data)
+      console.log(data)
+    }
 
     const fetchRecipes = async () => {
       /* 
         LLM endpoint
       */
-      // const response = await fetch('http://localhost:4000/recipes', {
-      //   method: 'GET',
-      //   headers: { 'Content-Type': 'application/json' },
+      // const response = await fetch(&#39;http://localhost:4000/recipes&#39;, {
+      //   method: &#39;GET&#39;,
+      //   headers: { &#39;Content-Type&#39;: &#39;application/json&#39; },
       // })
       // const data = await response.json()
       // setRecipes(data)
@@ -76,15 +79,15 @@ const page = memo(() => {
             name: 'chef1',
           },
         },
-      ]);
-    };
+      ])
+    }
 
     if (type === 'chef') {
-      fetchOrders();
+      fetchOrders()
     } else if (type === 'user') {
-      fetchRecipes();
+      fetchRecipes()
     }
-  }, [type]);
+  }, [type])
 
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-r from-[#FFC371] to-[#FF5F6D] p-10 w-full">
@@ -103,7 +106,7 @@ const page = memo(() => {
             height={50}
             className={clsx('aspect-square w-16 h-16 hover:scale-105', { 'animate-spin': spin })}
             onClick={() => {
-              search();
+              search()
             }}
           />
         </div>
@@ -112,7 +115,7 @@ const page = memo(() => {
         <p
           className="px-4 py-2 bg-green-300 rounded-md hover:scale-105"
           onClick={() => {
-            setType('chef');
+            setType('chef')
           }}
         >
           Be a chef
@@ -120,7 +123,7 @@ const page = memo(() => {
         <p
           className="px-4 py-2 bg-green-300 rounded-md hover:scale-105"
           onClick={() => {
-            setType('user');
+            setType('user')
           }}
         >
           Get a chef
@@ -154,7 +157,7 @@ const page = memo(() => {
         </div>
       )}
     </div>
-  );
-});
+  )
+})
 
-export default page;
+export default page
