@@ -6,7 +6,7 @@ import clsx from 'clsx'
 import Recommendation from '@/components/Recommendation'
 import Orders from '@/components/Orders'
 
-const page = memo(() => {
+const Page = memo(() => {
   useClient()
 
   const email = localStorage?.getItem('email')
@@ -141,6 +141,7 @@ const page = memo(() => {
                 recipe={order.recipe}
                 request_user={order.request_user}
                 _id={order._id}
+                key={index}
               />
             ))}
           </div>
@@ -160,4 +161,4 @@ const page = memo(() => {
   )
 })
 
-export default page
+export default Page
